@@ -21,8 +21,18 @@ const userSchema = Schema(
         avatar : {
             type : String, //cloudinary url
         },
-        friends : [],
-        habits : [],
+        friends : [
+            {
+                type : Schema.Types.ObjectId,
+                ref : 'User'
+            }
+        ],
+        habits : [
+            {
+                type : Schema.Types.ObjectId,
+                ref : 'Habit'
+            }
+        ],
         isShared : {
             type : Boolean
         }
