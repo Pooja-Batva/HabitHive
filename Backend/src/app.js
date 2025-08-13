@@ -16,16 +16,23 @@ app.use(cors({
 }));
 
 // user no data configure karva mate
-app.use(express.json({limit : "16kb"}));
+app.use(express.json());
 
 // url no data excess karva mate
-app.use(express.urlencoded({extended : true}));
+app.use(express.urlencoded({ extended: true }));
 
 // temp storage
 app.use(express.static("public"));
 
 // secure cookie save karva mate
 app.use(cookieParser());
+
+
+// // for debug
+// app.use((req, res, next) => {
+//   console.log('BODY:', req.body);
+//   next();
+// });
 
 
 // Routes import

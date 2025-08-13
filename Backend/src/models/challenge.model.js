@@ -4,7 +4,7 @@ const challengeSchema = Schema(
     {
         name : {
             type : String,
-            required : trusted,
+            required : true,
         },
         desc : {
             type : String

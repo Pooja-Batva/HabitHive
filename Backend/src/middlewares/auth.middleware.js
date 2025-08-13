@@ -25,7 +25,7 @@ const verifyJWT = asyncHandler(async(req, res, next) => {
         next();
 
     } catch (error) {
-        throw apiError(401, "Invalid Access Token.")
+        throw new apiError(401, "Invalid Access Token.")
     }
 });
 

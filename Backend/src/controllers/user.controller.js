@@ -1,12 +1,15 @@
 import { User } from "../models/user.model.js";
-import { apiError, asyncHandler } from "../utils/index.js";
+import { apiError, apiResponse, asyncHandler } from "../utils/index.js";
 
 
 const generateAccessAndRefreshToken = async(userId) => {
     try {
         const user = await User.findById(userId);
-        const accessToken = user.generateAccessAndRefreshToken();
-        const refreshToken = user.generateAccessAndRefreshToken();
+        const accessToken = await user.generateAccessToken();
+        // console.log("accessToken", accessToken);
+        const refreshToken = await user.generateRefreshToken();
+        // console.log("refreshToken", refreshToken);
+
     
         // save refresh tokem
         user.refreshToken = refreshToken;
@@ -59,14 +62,17 @@ const registerUser = asyncHandler(async (req, res) => {
     return res
     .status(201)
     .json(
-        200,
-        createdUser,
-        "User Register successfully"
+        new apiResponse(
+            200,
+            createdUser,
+            "User Register successfully"
+        )
     )
 });
 
 const loginUser = asyncHandler(async(req, res) => {
     // fetch data
+    console.log(req.body);
     const {username, email, password} = req.body;
 
     // validation
@@ -108,11 +114,13 @@ const loginUser = asyncHandler(async(req, res) => {
     .cookie("refreshToken", refreshToken, options)
     .cookie("accessToken", accessToken, options)
     .json(
-        200, 
-        {
-            user : loggedinUser, accessToken, refreshToken
-        },
-        "User logged in successfully"
+        new apiResponse(
+            200, 
+            {
+                user : loggedinUser, accessToken, refreshToken
+            },
+            "User logged in successfully"
+        )
     )
 })
 
@@ -136,12 +144,14 @@ const logoutUser = asyncHandler(async(req, res) => {
 
     return res
     .status(200)
-    .clearcookie("accessToken", options)
-    .clearcookie("refreshToken", options)
+    .clearCookie("accessToken", options)
+    .clearCookie("refreshToken", options)
     .json(
-        200, 
-        {},
-        "User Logged out"
+        new apiResponse(
+            200, 
+            {},
+            "User Logged out"
+        )
     )
 });
 
